@@ -138,10 +138,39 @@ print('df5.loc["d":"g",["var3"]] is :\n', df5.loc["d":"g",["var3"]], "\n")
 print('type of df5.loc["d":"g",["var3"]] is :\n', type(df5.loc["d":"g",["var3"]]), "\n")
 print('df5.iloc[2:5,2] is :\n',df5.iloc[2:5,2], "\n")
 print('type of df5.iloc[2:5,2] is :\n', type(df5.iloc[2:5,2]), "\n")
-
-
-
-
+print('df5.iloc[2:5][["var2"]] is :\n', df5.iloc[2:5][["var2"]],"\n")
+print('type of df5.iloc[2:5][["var2"]] is :\n', type(df5.iloc[2:5][["var2"]]), "\n")
+print('df3 is :\n', df3, "\n" )
+print('df3.loc["C"] is :\n', df3.loc["C"], "\n")
+print('df3.iloc[2] is :\n', df3.iloc[2], "\n")
+print('df3.loc[["C"]] is df :\n', df3.loc[["C"]], "\n")
+print('df3.iloc[[2]] is :\n', df3.iloc[[2]], "\n")
+### Selecting subset of rows and columns ###
+print('df3.loc["C","Z"] is :\n',df3.loc["C","Z"], "\n")
+print('type of df3.loc["C","Z"]\n', type(df3.loc["C","Z"]), "\n")
+print('df3.loc[["C"],["Z"]] is :\n', df3.loc[["C"],["Z"]], "\n")
+print('type of df3.loc[["C"],["Z"]] is:\n', type(df3.loc[["C"],["Z"]]), "\n")
+print('df3.loc[["A", "C"], ["X","Z"]] is :\n', df3.loc[["A", "C"], ["X","Z"]], "\n")
+print('type of df3.loc[["A", "C"], ["X","Z"]] is :\n',type(df3.loc[["A", "C"], ["X","Z"]]),"\n")
+print('df3.iloc[[0,2],[0,3]] is :\n',df3.iloc[[0,2],[0,3]], "\n")
+print('type of df3.iloc[[0,2],[0,3]] is :',type(df3.iloc[[0,2],[0,3]]),"\n")
+### Conditional Selection ###
+print('df3[df3 > 2] is :\n', df3[df3 > 2], "\n")
+print('df3[df3["Z"]>0.5] is :\n', df3[df3["Z"]>0.5], "\n")
+print('df3[df3["Z"]>0.5][["X"]] is :\n', df3[df3["Z"]>0.5][["X"]], "\n")
+### For two conditions you can use | → or, & → and with parenthesis: ###
+print("df3[(df3['W']>0) & (df3['Y']<1)] is :\n", df3[(df3['W']>0) & (df3['Y']<1)] , "\n")
+print("df3[(df3['W']>0) & (df3['Y']<1)] == 0 is :\n", df3[(df3['W']>0) & (df3['Y']<1)] == 0, "\n")
+### Conditional selection using .loc[] and .iloc[] ###
+print('df3.loc[(df3.X > 0), ["X", "Y"]] is :\n', df3.loc[(df3.X > 0), ["X", "Y"]], "\n")
+print("df3.loc[((df3.W>1) | (df3.Y<1)), ['Y','Z']] is :\n", df3.loc[((df3.W>1) | (df3.Y<1)), ['Y','Z']], "\n")
+df3.reset_index()
+print('df3.reset_index() is :\n',df3.reset_index(), "\n")
+df3.reset_index(drop=True)
+print("df3.reset_index(drop=True) is :\n", df3, "\n")
+print('df3.set_index("Z") is :\n', df3.set_index("Z"), "\n")
+df3.reset_index(drop=True, inplace=True)
+print('df3.reset_index(drop=True, inplace=True) is :\n', df3,"\n")
 
 
 
