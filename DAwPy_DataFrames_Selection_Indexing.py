@@ -12,7 +12,7 @@ print("changing column name\n",pd.DataFrame(data = data, columns=["col_1"]),"\n"
 m = np.arange(1,24,2).reshape(3,4)
 print("m :\n", m ,"\n")
 df=pd.DataFrame(data=m, columns=['var1','var2','var3','var4'])
-print("dataframe of m:\n",df,"\n")
+print("dataframe of m/df:\n",df,"\n")
 print("head of df m :\n", df.head(),"\n")
 print("head with value 1 :\n", df.head(1),"\n")
 print("tail of m:\n", df.tail(),"\n")
@@ -48,7 +48,7 @@ df1 = pd.DataFrame(my_dict)
 print("df1 is :\n", df1, "\n")
 print("df1 index is : \n", df1.index, "\n")
 print("list comprehensions [i for i in df1.index]:\n", [i for i in df1.index], "\n")
-print("'var2' in df1 :\n","var2" in df1)
+print("'var2' in df1 :\n","var2" in df1, "\n")
 ### Now, let's examine again the idexing, selection and slicing methods
 # and several attributes using a different DataFrame : ###
 from numpy.random import randn
@@ -62,19 +62,19 @@ print("df3['W'] :\n", df3["W"], "\n")
 print("type of df3 :\n", type(df3["W"]), "\n")
 print("df3[['W']] :\n", df3[["W"]], "\n")
 print("type of df3[['W']] :\n", type(df3[["W"]]), "\n")
-print("df3[['W', 'Z']] is df:\n", df3[["W", "Z"]], "\n")
-print("df3['A':'C'] is a df :\n", df3["A":"C"], "\n")
+print("df3[['W', 'Z']] is df:\n", df3[["W", "Z"]], "\n") #selection
+print("df3['A':'C'] is a df :\n", df3["A":"C"], "\n") # slicing
 print("type of df3['A':'C'] :\n", type(df3['A':'C']),"\n")
 print("df3['A':'C']['W'] :\n", df3["A":"C"]["W"], "\n")
 a= df3["A": "C"][["W", "Y"]]
 print("a is (df3['A': 'C'][['W', 'Y']]) :\n", a, "\n")
 # Creating a new column :
 print("df3 is :\n", df3, "\n")
-df3["new"] = df3["X"] * df3["Y"]
+df3["new"] = df3["X"] * df3["Y"] # insertion
 print("df3['new'] = df3['X'] * df3['Y'] :\n", df3, "\n")
 df3["new2"] = [1,2,3,4,5]
 print("df3['new2'] = [1,2,3,4,5] :\n",df3,"\n")
-df3 = df3[["new", "new2", "W", "X", "Y", "Z"]]
+df3 = df3[["new", "new2", "W", "X", "Y", "Z"]] # reordering column
 print("df3 = df3[['new', 'new2', 'W', 'X', 'Y', 'Z']] :\n",df3, "\n")
 ### Removing Columns & Rows ###
 # Removing Columns
