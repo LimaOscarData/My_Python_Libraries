@@ -71,7 +71,8 @@ print(data)
 # A         17   Mumbai      F             red  Mu
 
 # How to remove the column city ?
-data.drop("city", axis=1, inplace=True)
+data.drop(columns="city", inplace=True) # you can use this way or below
+# data.drop("city", axis=1, inplace=True)
 print(data)
 #          age gender favourite_color new
 # section                                
@@ -83,4 +84,5 @@ print(data)
 # A         11      M           green  De
 # A         17      F             red  Mu
 
-'''
+''' 
+
