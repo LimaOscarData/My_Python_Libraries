@@ -84,5 +84,5 @@ print(data)
 # A         11      M           green  De
 # A         17      F             red  Mu
 
-''' 
+'''
 
