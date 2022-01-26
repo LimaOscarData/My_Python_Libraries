@@ -38,7 +38,7 @@ train['Name_length'] = train['Name'].apply(len)
 # 3       Futrelle, Mrs. Jacques Heath (Lily May Peel)           44
 # 4                           Allen, Mr. William Henry           24
 
-#################################################################
+#----------------------------------------------------------
 
 # You can use it with a numpy function
 train['Fare_ceil'] = train['Fare'].apply(np.ceil)
@@ -50,7 +50,7 @@ train['Fare_ceil'] = train['Fare'].apply(np.ceil)
 # 3  53.1000       54.0
 # 4   8.0500        9.0
 
-#################################################################
+#----------------------------------------------------------
 
 def get_element(my_list, position):
     return my_list[position]
@@ -65,10 +65,10 @@ def get_element(my_list, position):
 # 4        Allen
 # Name: Name, dtype: object
 
-#################################################################
+#----------------------------------------------------------
 
 # Also you can use lambda function like this :
-print(train['Name'].str.split(",").apply(lambda x: x[0]).head() )
+# print(train['Name'].str.split(",").apply(lambda x: x[0]).head() )
 # 0       Braund
 # 1      Cumings
 # 2    Heikkinen
@@ -76,14 +76,73 @@ print(train['Name'].str.split(",").apply(lambda x: x[0]).head() )
 # 4        Allen
 # Name: Name, dtype: object
 
+#################################################################
 
+# Let's try dataframe apply method :
 
+drinks = pd.read_csv('http://bit.ly/drinksbycountry')
+print(drinks.head())
+#        country  beer_servings  ...  total_litres_of_pure_alcohol  continent
+# 0  Afghanistan              0  ...                           0.0       Asia
+# 1      Albania             89  ...                           4.9     Europe
+# 2      Algeria             25  ...                           0.7     Africa
+# 3      Andorra            245  ...                          12.4     Europe
+# 4       Angola            217  ...                           5.9     Africa
+#
+# [5 rows x 6 columns]
 
+#----------------------------------------------------------
+# Lets get the our dataframe that we need and use the apply method:
+# The axis means below is the direction for the function.
+# If axis is 0 : to the right wise, 1 is for downstream.
+a=drinks.loc[:, 'beer_servings': 'wine_servings'].apply(max, axis=0)
+# # print(a)
+# [5 rows x 6 columns]
+# beer_servings      376
+# spirit_servings    438
+# wine_servings      370
+# dtype: int64
 
+#----------------------------------------------------------
 
+b = drinks.loc[:, 'beer_servings':'wine_servings'].apply(max, axis=1).head()
+# print(b)
+# 0      0
+# 1    132
+# 2     25
+# 3    312
+# 4    217
+# dtype: int64
 
+#----------------------------------------------------------
 
+c = drinks.loc[:, 'beer_servings':'wine_servings'].apply(np.argmax, axis=1).head()
+print(c)
+# 0    0
+# 1    1
+# 2    0
+# 3    2
+# 4    0
+# dtype: int64
 
+#################################################################
+
+# APPLY MAP :
+#  It is a dataframe method
+# Apply a function to every element in a dataframe.
+
+drinks.loc[:, 'beer_servings': 'wine_servings'] = \
+drinks.loc[:, 'beer_servings': 'wine_servings'].applymap(float)
+print(drinks.head())
+
+#        country  beer_servings  ...  total_litres_of_pure_alcohol  continent
+# 0  Afghanistan            0.0  ...                           0.0       Asia
+# 1      Albania           89.0  ...                           4.9     Europe
+# 2      Algeria           25.0  ...                           0.7     Africa
+# 3      Andorra          245.0  ...                          12.4     Europe
+# 4       Angola          217.0  ...                           5.9     Africa
+#
+# [5 rows x 6 columns]
 
 
 
