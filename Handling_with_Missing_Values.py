@@ -142,7 +142,7 @@ df = pd.DataFrame({
 # NaN, standing for not a number, is a numeric data type used to represent
 # any value that is undefined or unpresentable.
 
-print(df)
+# print(df)
 #       id gender status dept var1  var2  salary
 # 0   P001      M     FT   DS    2   8.0     NaN
 # 1   P002      F     PT   FS    3   NaN    54.0
@@ -372,7 +372,148 @@ print(df)
 # # 10     True
 # # dtype: bool
 
-# ------------------------------------------------------------
+#################### Converting inappropriate values to NaN values #####################
+# map()
+# replace()
+
+print(df)
+
+
+# Values in Series that are not in the dictionary
+# (as keys) are converted to NaN.
+# print(df['var1'].map({'-':np.nan}))
+# 0    NaN
+# 1    NaN
+# 2    NaN
+# 3    NaN
+# 4    NaN
+# 5    NaN
+# 6    NaN
+# 7    NaN
+# 8    NaN
+# 9    NaN
+# 10   NaN
+# Name: var1, dtype: float64
+# Notes: When arg is a dictionary, values in Series that are not in the dictionary
+# (as keys) are converted to NaN. However, if the dictionary is a dict subclass that
+# defines missing (i.e. provides a method for default values), then this default is
+# used rather than NaN.
+
+# print(df['var1'].replace(to_replace='-', value=np.nan))
+# 0       2
+# 1       3
+# 2       5
+# 3     nan
+# 4       7
+# 5       1
+# 6     nan
+# 7      10
+# 8      14
+# 9     NaN
+# 10      6
+# Name: var1, dtype: object
+
+# print(df['var1'].replace(to_replace='-', value=np.nan).astype('float'))
+# 0      2.0
+# 1      3.0
+# 2      5.0
+# 3      NaN
+# 4      7.0
+# 5      1.0
+# 6      NaN
+# 7     10.0
+# 8     14.0
+# 9      NaN
+# 10     6.0
+# Name: var1, dtype: float64
+
+# The "to_replace" value's UPPER or lower case is not important .
+# you can write 'nan' or 'NaN', it understand as NaN.
+# print(df['var1'].replace(to_replace=['-', 'nan'], value=np.nan).astype(float))
+# 0      2.0
+# 1      3.0
+# 2      5.0
+# 3      NaN
+# 4      7.0
+# 5      1.0
+# 6      NaN
+# 7     10.0
+# 8     14.0
+# 9      NaN
+# 10     6.0
+# Name: var1, dtype: float64
+
+# You can assign it to a column for saving original data frame.
+df['var1'] = df['var1'].replace(to_replace='-', value=np.nan).astype('float')
+# print(df['var1'])
+# 0      2.0
+# 1      3.0
+# 2      5.0
+# 3      NaN
+# 4      7.0
+# 5      1.0
+# 6      NaN
+# 7     10.0
+# 8     14.0
+# 9      NaN
+# 10     6.0
+# Name: var1, dtype: float64
+
+
+df['status'] = df['status'].replace(to_replace='-', value=np.nan)
+# print(df['status'])
+# 0      FT
+# 1      PT
+# 2     NaN
+# 3      FT
+# 4      PT
+# 5      PT
+# 6      FT
+# 7     NaN
+# 8      PT
+# 9      FT
+# 10    NaN
+# Name: status, dtype: object
+
+print(df)
+#       id gender status dept  var1  var2  salary
+# 0   P001      M     FT   DS   2.0   8.0     NaN
+# 1   P002      F     PT   FS   3.0   NaN    54.0
+# 2   P003      M    NaN  AWS   5.0   5.0    59.0
+# 3   P004      F     FT  AWS   NaN   8.0   120.0
+# 4   P005      M     PT   DS   7.0  11.0    58.0
+# 5   P006      F     PT  NaN   1.0   NaN    75.0
+# 6   P007      M     FT   FS   NaN   NaN     NaN
+# 7   P008      F    NaN   FS  10.0   2.0   136.0
+# 8   P009      M     PT  NaN  14.0   3.0    60.0
+# 9   P010      F     FT   DS   NaN   7.0   125.0
+# 10  P011      M    NaN  AWS   6.0   9.0     NaN
+
+print(df.isnull().sum())
+# id        0
+# gender    0
+# status    3
+# dept      2
+# var1      3
+# var2      3
+# salary    3
+# dtype: int64
+
+print(df.isnull().sum(axis=1))
+# 0     1
+# 1     1
+# 2     1
+# 3     1
+# 4     0
+# 5     2
+# 6     3
+# 7     1
+# 8     1
+# 9     1
+# 10    2
+# dtype: int64
+
+
 # ------------------------------------------------------------
 # ------------------------------------------------------------
 # ------------------------------------------------------------
