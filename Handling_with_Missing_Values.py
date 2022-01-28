@@ -376,7 +376,7 @@ df = pd.DataFrame({
 # map()
 # replace()
 
-print(df)
+# print(df)
 
 
 # Values in Series that are not in the dictionary
@@ -475,7 +475,7 @@ df['status'] = df['status'].replace(to_replace='-', value=np.nan)
 # 10    NaN
 # Name: status, dtype: object
 
-print(df)
+# print(df)
 #       id gender status dept  var1  var2  salary
 # 0   P001      M     FT   DS   2.0   8.0     NaN
 # 1   P002      F     PT   FS   3.0   NaN    54.0
@@ -489,7 +489,7 @@ print(df)
 # 9   P010      F     FT   DS   NaN   7.0   125.0
 # 10  P011      M    NaN  AWS   6.0   9.0     NaN
 
-print(df.isnull().sum())
+# print(df.isnull().sum())
 # id        0
 # gender    0
 # status    3
@@ -499,7 +499,7 @@ print(df.isnull().sum())
 # salary    3
 # dtype: int64
 
-print(df.isnull().sum(axis=1))
+# print(df.isnull().sum(axis=1))
 # 0     1
 # 1     1
 # 2     1
@@ -513,8 +513,189 @@ print(df.isnull().sum(axis=1))
 # 10    2
 # dtype: int64
 
+############### Missing value handling methods ##################
+
+# Deleting Rows ----->if it has more than 70-75% of missing values. This
+# percentage can change according to the data. So each situation should be
+# evaluated case by case.
+#
+# Replacing With Mean/Median/Mode (Imputation)--->can be applied on a feature
+# which has numeric data
+#
+# Assigning An Unique Category--->If a categorical feature has definite number
+# of classes, we can assign another class
+#
+# Predicting The Missing Values---> we can predict the nulls with the help of
+# a machine learning algorithm like linear regression
+#
+# Using Algorithms Which Support Missing Values--->KNN is a machine learning
+# algorithm which works on the principle of distance measure. This algorithm
+# can be used when there are nulls present in the dataset. KNN considers the
+# missing values by taking the majority of the K nearest values
+
+# Dropping :
+# dropna()
+# drop()
+
+print(df)
+
+# print(df.dropna(axis=1, how='any', thresh=None, inplace=False))
+#       id gender
+# 0   P001      M
+# 1   P002      F
+# 2   P003      M
+# 3   P004      F
+# 4   P005      M
+# 5   P006      F
+# 6   P007      M
+# 7   P008      F
+# 8   P009      M
+# 9   P010      F
+# 10  P011      M
+
+# print(df.dropna(axis=0, how='any', thresh=None, inplace=False))
+#      id gender status dept  var1  var2  salary
+# 4  P005      M     PT   DS   7.0  11.0    58.0
+
+# print(df.dropna(axis=1, how='all', thresh=0, inplace=False))
+#       id gender status dept  var1  var2  salary
+# 0   P001      M     FT   DS   2.0   8.0     NaN
+# 1   P002      F     PT   FS   3.0   NaN    54.0
+# 2   P003      M    NaN  AWS   5.0   5.0    59.0
+# 3   P004      F     FT  AWS   NaN   8.0   120.0
+# 4   P005      M     PT   DS   7.0  11.0    58.0
+# 5   P006      F     PT  NaN   1.0   NaN    75.0
+# 6   P007      M     FT   FS   NaN   NaN     NaN
+# 7   P008      F    NaN   FS  10.0   2.0   136.0
+# 8   P009      M     PT  NaN  14.0   3.0    60.0
+# 9   P010      F     FT   DS   NaN   7.0   125.0
+# 10  P011      M    NaN  AWS   6.0   9.0     NaN
+
+# 'any' : If any NA values are present, drop that row or column.
+# 'all' : If all values are NA, drop that row or column.
+
+# default of dropna:
+# axis=0, how='any', thresh=0, inplace=False.
+
+# dropna() with default values :
+# don't forget to use parentheses ().
+# If you don't use it, you can't apply it correctly
+# print(df.dropna())
+#      id gender status dept  var1  var2  salary
+# 4  P005      M     PT   DS   7.0  11.0    58.0
+
+# subset: specifies the rows/columns to look for null values.
+# Use subset inside the square brackets [] .
+# print(df.dropna(subset=['status']))
+#      id gender status dept  var1  var2  salary
+# 0  P001      M     FT   DS   2.0   8.0     NaN
+# 1  P002      F     PT   FS   3.0   NaN    54.0
+# 3  P004      F     FT  AWS   NaN   8.0   120.0
+# 4  P005      M     PT   DS   7.0  11.0    58.0
+# 5  P006      F     PT  NaN   1.0   NaN    75.0
+# 6  P007      M     FT   FS   NaN   NaN     NaN
+# 8  P009      M     PT  NaN  14.0   3.0    60.0
+# 9  P010      F     FT   DS   NaN   7.0   125.0
+
+
+df['delete_me'] = np.nan
+# print(df)
+#       id gender status dept  var1  var2  salary  delete_me
+# 0   P001      M     FT   DS   2.0   8.0     NaN        NaN
+# 1   P002      F     PT   FS   3.0   NaN    54.0        NaN
+# 2   P003      M    NaN  AWS   5.0   5.0    59.0        NaN
+# 3   P004      F     FT  AWS   NaN   8.0   120.0        NaN
+# 4   P005      M     PT   DS   7.0  11.0    58.0        NaN
+# 5   P006      F     PT  NaN   1.0   NaN    75.0        NaN
+# 6   P007      M     FT   FS   NaN   NaN     NaN        NaN
+# 7   P008      F    NaN   FS  10.0   2.0   136.0        NaN
+# 8   P009      M     PT  NaN  14.0   3.0    60.0        NaN
+# 9   P010      F     FT   DS   NaN   7.0   125.0        NaN
+# 10  P011      M    NaN  AWS   6.0   9.0     NaN        NaN
+
+df.dropna(axis=1, how='all', thresh=None, inplace=True)
+# print(df)
+#       id gender status dept  var1  var2  salary
+# 0   P001      M     FT   DS   2.0   8.0     NaN
+# 1   P002      F     PT   FS   3.0   NaN    54.0
+# 2   P003      M    NaN  AWS   5.0   5.0    59.0
+# 3   P004      F     FT  AWS   NaN   8.0   120.0
+# 4   P005      M     PT   DS   7.0  11.0    58.0
+# 5   P006      F     PT  NaN   1.0   NaN    75.0
+# 6   P007      M     FT   FS   NaN   NaN     NaN
+# 7   P008      F    NaN   FS  10.0   2.0   136.0
+# 8   P009      M     PT  NaN  14.0   3.0    60.0
+# 9   P010      F     FT   DS   NaN   7.0   125.0
+# 10  P011      M    NaN  AWS   6.0   9.0     NaN
+
+
+# thresh=N requires that a column has at least N non-NaNs to survive.
+# print(df.dropna(axis=1, how='any', thresh=9, inplace=False))
+#       id gender dept
+# 0   P001      M   DS
+# 1   P002      F   FS
+# 2   P003      M  AWS
+# 3   P004      F  AWS
+# 4   P005      M   DS
+# 5   P006      F  NaN
+# 6   P007      M   FS
+# 7   P008      F   FS
+# 8   P009      M  NaN
+# 9   P010      F   DS
+# 10  P011      M  AWS
+
+# print(df.drop([1, 3, 5]))
+#       id gender status dept  var1  var2  salary
+# 0   P001      M     FT   DS   2.0   8.0     NaN
+# 2   P003      M    NaN  AWS   5.0   5.0    59.0
+# 4   P005      M     PT   DS   7.0  11.0    58.0
+# 6   P007      M     FT   FS   NaN   NaN     NaN
+# 7   P008      F    NaN   FS  10.0   2.0   136.0
+# 8   P009      M     PT  NaN  14.0   3.0    60.0
+# 9   P010      F     FT   DS   NaN   7.0   125.0
+# 10  P011      M    NaN  AWS   6.0   9.0     NaN
+
+# print(df.drop(index=[1, 2, 3]))
+#       id gender status dept  var1  var2  salary
+# 0   P001      M     FT   DS   2.0   8.0     NaN
+# 4   P005      M     PT   DS   7.0  11.0    58.0
+# 5   P006      F     PT  NaN   1.0   NaN    75.0
+# 6   P007      M     FT   FS   NaN   NaN     NaN
+# 7   P008      F    NaN   FS  10.0   2.0   136.0
+# 8   P009      M     PT  NaN  14.0   3.0    60.0
+# 9   P010      F     FT   DS   NaN   7.0   125.0
+# 10  P011      M    NaN  AWS   6.0   9.0     NaN
+
+# print(df.drop(['var1', 'var2'], axis=1))
+#       id gender status dept  salary
+# 0   P001      M     FT   DS     NaN
+# 1   P002      F     PT   FS    54.0
+# 2   P003      M    NaN  AWS    59.0
+# 3   P004      F     FT  AWS   120.0
+# 4   P005      M     PT   DS    58.0
+# 5   P006      F     PT  NaN    75.0
+# 6   P007      M     FT   FS     NaN
+# 7   P008      F    NaN   FS   136.0
+# 8   P009      M     PT  NaN    60.0
+# 9   P010      F     FT   DS   125.0
+# 10  P011      M    NaN  AWS     NaN
+
+# print(df.drop(columns=['var1', 'var2']))
+#       id gender status dept  salary
+# 0   P001      M     FT   DS     NaN
+# 1   P002      F     PT   FS    54.0
+# 2   P003      M    NaN  AWS    59.0
+# 3   P004      F     FT  AWS   120.0
+# 4   P005      M     PT   DS    58.0
+# 5   P006      F     PT  NaN    75.0
+# 6   P007      M     FT   FS     NaN
+# 7   P008      F    NaN   FS   136.0
+# 8   P009      M     PT  NaN    60.0
+# 9   P010      F     FT   DS   125.0
+# 10  P011      M    NaN  AWS     NaN
 
 # ------------------------------------------------------------
+
 # ------------------------------------------------------------
 # ------------------------------------------------------------
 # ------------------------------------------------------------
