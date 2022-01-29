@@ -537,7 +537,7 @@ df['status'] = df['status'].replace(to_replace='-', value=np.nan)
 # dropna()
 # drop()
 
-print(df)
+# print(df)
 
 # print(df.dropna(axis=1, how='any', thresh=None, inplace=False))
 #       id gender
@@ -694,7 +694,449 @@ df.dropna(axis=1, how='all', thresh=None, inplace=True)
 # 9   P010      F     FT   DS   125.0
 # 10  P011      M    NaN  AWS     NaN
 
-# ------------------------------------------------------------
+########### Filling Missing Values (Imputation) #################
+# fillna()
+# where()
+# interpolate()
+
+print(df)
+
+########## a.Filling with a specific value :
+
+# print(df.fillna(0))
+#       id gender status dept  var1  var2  salary
+# 0   P001      M     FT   DS   2.0   8.0     0.0
+# 1   P002      F     PT   FS   3.0   0.0    54.0
+# 2   P003      M      0  AWS   5.0   5.0    59.0
+# 3   P004      F     FT  AWS   0.0   8.0   120.0
+# 4   P005      M     PT   DS   7.0  11.0    58.0
+# 5   P006      F     PT    0   1.0   0.0    75.0
+# 6   P007      M     FT   FS   0.0   0.0     0.0
+# 7   P008      F      0   FS  10.0   2.0   136.0
+# 8   P009      M     PT    0  14.0   3.0    60.0
+# 9   P010      F     FT   DS   0.0   7.0   125.0
+# 10  P011      M      0  AWS   6.0   9.0     0.0
+
+# print(df['var1'])
+# 0      2.0
+# 1      3.0
+# 2      5.0
+# 3      NaN
+# 4      7.0
+# 5      1.0
+# 6      NaN
+# 7     10.0
+# 8     14.0
+# 9      NaN
+# 10     6.0
+# Name: var1, dtype: float64
+
+# print(df['var1'].fillna(0))
+# 0      2.0
+# 1      3.0
+# 2      5.0
+# 3      0.0
+# 4      7.0
+# 5      1.0
+# 6      0.0
+# 7     10.0
+# 8     14.0
+# 9      0.0
+# 10     6.0
+# Name: var1, dtype: float64
+
+####### b.Filling with any Proper Value :
+
+# print(df['var1'])
+# 0      2.0
+# 1      3.0
+# 2      5.0
+# 3      NaN
+# 4      7.0
+# 5      1.0
+# 6      NaN
+# 7     10.0
+# 8     14.0
+# 9      NaN
+# 10     6.0
+# Name: var1, dtype: float64
+
+# print(df['var1'].mean())
+# 6
+
+# print(df['var1'].fillna(df['var1'].mean()))
+# 0      2.0
+# 1      3.0
+# 2      5.0
+# 3      6.0
+# 4      7.0
+# 5      1.0
+# 6      6.0
+# 7     10.0
+# 8     14.0
+# 9      6.0
+# 10     6.0
+# Name: var1, dtype: float64
+
+# print(df['var1'].median())
+# 5.5
+
+# print(df['var1'].fillna(df['var1'].median()))
+# 0      2.0
+# 1      3.0
+# 2      5.0
+# 3      5.5
+# 4      7.0
+# 5      1.0
+# 6      5.5
+# 7     10.0
+# 8     14.0
+# 9      5.5
+# 10     6.0
+# Name: var1, dtype: float64
+
+# FutureWarning: Dropping of nuisance columns in DataFrame reductions
+# (with 'numeric_only=None') is deprecated; in a future version this
+# will raise TypeError.  Select only valid columns before calling the reduction.
+
+# print(df.mean(numeric_only=True))
+# var1       6.000
+# var2       6.625
+# salary    85.875
+# dtype: float64
+
+# print(df.fillna(df.mean(numeric_only=True)))
+#       id gender status dept  var1    var2   salary
+# 0   P001      M     FT   DS   2.0   8.000   85.875
+# 1   P002      F     PT   FS   3.0   6.625   54.000
+# 2   P003      M    NaN  AWS   5.0   5.000   59.000
+# 3   P004      F     FT  AWS   6.0   8.000  120.000
+# 4   P005      M     PT   DS   7.0  11.000   58.000
+# 5   P006      F     PT  NaN   1.0   6.625   75.000
+# 6   P007      M     FT   FS   6.0   6.625   85.875
+# 7   P008      F    NaN   FS  10.0   2.000  136.000
+# 8   P009      M     PT  NaN  14.0   3.000   60.000
+# 9   P010      F     FT   DS   6.0   7.000  125.000
+# 10  P011      M    NaN  AWS   6.0   9.000   85.875
+
+# filling columns with a specified values :
+# print(df.fillna({'status': 'other', 'var1': df['var1'].mean(), 'var2': df['var2'].median()}))
+#       id gender status dept  var1  var2  salary
+# 0   P001      M     FT   DS   2.0   8.0     NaN
+# 1   P002      F     PT   FS   3.0   7.5    54.0
+# 2   P003      M  other  AWS   5.0   5.0    59.0
+# 3   P004      F     FT  AWS   6.0   8.0   120.0
+# 4   P005      M     PT   DS   7.0  11.0    58.0
+# 5   P006      F     PT  NaN   1.0   7.5    75.0
+# 6   P007      M     FT   FS   6.0   7.5     NaN
+# 7   P008      F  other   FS  10.0   2.0   136.0
+# 8   P009      M     PT  NaN  14.0   3.0    60.0
+# 9   P010      F     FT   DS   6.0   7.0   125.0
+# 10  P011      M  other  AWS   6.0   9.0     NaN
+
+############### where() : Replace values where the condition is False #############
+
+# print(df.notna())
+#       id  gender  status   dept   var1   var2  salary
+# 0   True    True    True   True   True   True   False
+# 1   True    True    True   True   True  False    True
+# 2   True    True   False   True   True   True    True
+# 3   True    True    True   True  False   True    True
+# 4   True    True    True   True   True   True    True
+# 5   True    True    True  False   True  False    True
+# 6   True    True    True   True  False  False   False
+# 7   True    True   False   True   True   True    True
+# 8   True    True    True  False   True   True    True
+# 9   True    True    True   True  False   True    True
+# 10  True    True   False   True   True   True   False
+
+# You must use the axis= , option . Because it hasn't a default value.
+# print(df.where(cond=df.notna(), other=df.mean(numeric_only=True), axis=1))
+#       id gender status dept  var1    var2   salary
+# 0   P001      M     FT   DS   2.0   8.000   85.875
+# 1   P002      F     PT   FS   3.0   6.625   54.000
+# 2   P003      M    NaN  AWS   5.0   5.000   59.000
+# 3   P004      F     FT  AWS   6.0   8.000  120.000
+# 4   P005      M     PT   DS   7.0  11.000   58.000
+# 5   P006      F     PT  NaN   1.0   6.625   75.000
+# 6   P007      M     FT   FS   6.0   6.625   85.875
+# 7   P008      F    NaN   FS  10.0   2.000  136.000
+# 8   P009      M     PT  NaN  14.0   3.000   60.000
+# 9   P010      F     FT   DS   6.0   7.000  125.000
+# 10  P011      M    NaN  AWS   6.0   9.000   85.875
+
+# If there isn't any value before or after a value, interpolate can't calculate it.
+# print(df.interpolate())
+#       id gender status dept  var1  var2  salary
+# 0   P001      M     FT   DS   2.0   8.0     NaN
+# 1   P002      F     PT   FS   3.0   6.5    54.0
+# 2   P003      M    NaN  AWS   5.0   5.0    59.0
+# 3   P004      F     FT  AWS   6.0   8.0   120.0
+# 4   P005      M     PT   DS   7.0  11.0    58.0
+# 5   P006      F     PT  NaN   1.0   8.0    75.0
+# 6   P007      M     FT   FS   5.5   5.0   105.5
+# 7   P008      F    NaN   FS  10.0   2.0   136.0
+# 8   P009      M     PT  NaN  14.0   3.0    60.0
+# 9   P010      F     FT   DS  10.0   7.0   125.0
+# 10  P011      M    NaN  AWS   6.0   9.0   125.0
+
+########### c.Filling the Missing Values of Categorical Variables ##########
+# print(df['dept'].mode())
+# 0    AWS
+# 1     DS
+# 2     FS
+# dtype: object
+
+# print(df['dept'].mode()[0])
+# AWS
+
+# print(df['dept'].fillna(df['dept'].mode()[0]))
+# 0      DS
+# 1      FS
+# 2     AWS
+# 3     AWS
+# 4      DS
+# 5     AWS
+# 6      FS
+# 7      FS
+# 8     AWS
+# 9      DS
+# 10    AWS
+# Name: dept, dtype: object
+
+# method: Literal["backfill", "bfill", "ffill", "pad"]
+# print(df['dept'].fillna(method='bfill'))
+# 0      DS
+# 1      FS
+# 2     AWS
+# 3     AWS
+# 4      DS
+# 5      FS
+# 6      FS
+# 7      FS
+# 8      DS
+# 9      DS
+# 10    AWS
+# Name: dept, dtype: object
+
+# print(df['dept'].fillna(method='ffill'))
+# 0      DS
+# 1      FS
+# 2     AWS
+# 3     AWS
+# 4      DS
+# 5      DS
+# 6      FS
+# 7      FS
+# 8      FS
+# 9      DS
+# 10    AWS
+# Name: dept, dtype: object
+
+
+########### d.Filling by condition & by Group of the Categorical Variables ############
+# df['dept'].fillna(method='ffill', inplace=True)
+# print(df)
+#       id gender status dept  var1  var2  salary
+# 0   P001      M     FT   DS   2.0   8.0     NaN
+# 1   P002      F     PT   FS   3.0   NaN    54.0
+# 2   P003      M    NaN  AWS   5.0   5.0    59.0
+# 3   P004      F     FT  AWS   NaN   8.0   120.0
+# 4   P005      M     PT   DS   7.0  11.0    58.0
+# 5   P006      F     PT   DS   1.0   NaN    75.0
+# 6   P007      M     FT   FS   NaN   NaN     NaN
+# 7   P008      F    NaN   FS  10.0   2.0   136.0
+# 8   P009      M     PT   FS  14.0   3.0    60.0
+# 9   P010      F     FT   DS   NaN   7.0   125.0
+# 10  P011      M    NaN  AWS   6.0   9.0     NaN
+
+# print(df.loc[df['salary'] >= 100, 'status'])
+# 3     FT
+# 7    NaN
+# 9     FT
+# Name: status, dtype: object
+
+# In Loc :
+# 1. write the condition,
+# 2. then write which column that you want.
+# print(df.loc[df['var1'] >= 4 , ['id', 'gender', 'status', 'salary']])
+#       id gender status  salary
+# 2   P003      M    NaN    59.0
+# 4   P005      M     PT    58.0
+# 7   P008      F    NaN   136.0
+# 8   P009      M     PT    60.0
+# 10  P011      M    NaN     NaN
+
+# print(df.loc[df['var1'] >= 4 , 'id':'dept'])
+#       id gender status dept
+# 2   P003      M    NaN  AWS
+# 4   P005      M     PT   DS
+# 7   P008      F    NaN   FS
+# 8   P009      M     PT  NaN
+# 10  P011      M    NaN  AWS
+
+# nothing changed :
+# df.loc[df['salary'] >= 100, 'status'].fillna(df.loc[df['salary'] >= 100, 'status'].mode()[0], inplace=True)
+# df.loc[df['salary'] < 100, 'status'].fillna(df.loc[df['salary'] < 100, 'status' ].mode()[0], inplace=True)
+# print(df)
+#       id gender status dept  var1  var2  salary
+# 0   P001      M     FT   DS   2.0   8.0     NaN
+# 1   P002      F     PT   FS   3.0   NaN    54.0
+# 2   P003      M    NaN  AWS   5.0   5.0    59.0
+# 3   P004      F     FT  AWS   NaN   8.0   120.0
+# 4   P005      M     PT   DS   7.0  11.0    58.0
+# 5   P006      F     PT  NaN   1.0   NaN    75.0
+# 6   P007      M     FT   FS   NaN   NaN     NaN
+# 7   P008      F    NaN   FS  10.0   2.0   136.0
+# 8   P009      M     PT  NaN  14.0   3.0    60.0
+# 9   P010      F     FT   DS   NaN   7.0   125.0
+# 10  P011      M    NaN  AWS   6.0   9.0     NaN
+
+df.loc[df["salary"]>=100, "status"] = df.loc[df["salary"]>=100, "status"].fillna(df.loc[df["salary"]>=100, "status"].mode()[0])
+df.loc[df["salary"]<100, "status"] = df.loc[df["salary"]<100, "status"].fillna(df.loc[df["salary"]<100, "status"].mode()[0])
+# print(df)
+#       id gender status dept  var1  var2  salary
+# 0   P001      M     FT   DS   2.0   8.0     NaN
+# 1   P002      F     PT   FS   3.0   NaN    54.0
+# 2   P003      M     PT  AWS   5.0   5.0    59.0
+# 3   P004      F     FT  AWS   NaN   8.0   120.0
+# 4   P005      M     PT   DS   7.0  11.0    58.0
+# 5   P006      F     PT  NaN   1.0   NaN    75.0
+# 6   P007      M     FT   FS   NaN   NaN     NaN
+# 7   P008      F     FT   FS  10.0   2.0   136.0
+# 8   P009      M     PT  NaN  14.0   3.0    60.0
+# 9   P010      F     FT   DS   NaN   7.0   125.0
+# 10  P011      M    NaN  AWS   6.0   9.0     NaN
+
+# print(df.groupby(['gender','dept'])['status'].apply(lambda x : x.mode()[0]))
+# gender  dept
+# F       AWS     FT
+#         DS      FT
+#         FS      FT
+# M       AWS     PT
+#         DS      FT
+#         FS      FT
+# Name: status, dtype: object
+
+# print(df.groupby(['gender', 'dept'])['status'].transform(lambda x : x.mode()[0]))
+# 0     FT
+# 1     FT
+# 2     PT
+# 3     FT
+# 4     FT
+# 6     FT
+# 7     FT
+# 9     FT
+# 10    PT
+# Name: status, dtype: object
+
+#  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+# df['trans_status'] didn't accept the new assigned data. look at it again.
+df['trans_status'] = df.groupby(['gender', 'dept'])['status'].transform(lambda x : x.mode()[0])
+# print(df)
+#       id gender status dept  var1  var2  salary trans_status
+# 0   P001      M     FT   DS   2.0   8.0     NaN           FT
+# 1   P002      F     PT   FS   3.0   NaN    54.0           FT
+# 2   P003      M     PT  AWS   5.0   5.0    59.0           PT
+# 3   P004      F     FT  AWS   NaN   8.0   120.0           FT
+# 4   P005      M     PT   DS   7.0  11.0    58.0           FT
+# 5   P006      F     PT  NaN   1.0   NaN    75.0          NaN
+# 6   P007      M     FT   FS   NaN   NaN     NaN           FT
+# 7   P008      F     FT   FS  10.0   2.0   136.0           FT
+# 8   P009      M     PT  NaN  14.0   3.0    60.0          NaN
+# 9   P010      F     FT   DS   NaN   7.0   125.0           FT
+# 10  P011      M    NaN  AWS   6.0   9.0     NaN           PT
+
+df["status"].fillna(df.groupby(["gender", "dept"])["status"].transform(lambda x : x.mode()[0]), inplace=True)
+# print(df)
+#       id gender status dept  var1  var2  salary trans_status
+# 0   P001      M     FT   DS   2.0   8.0     NaN           FT
+# 1   P002      F     PT   FS   3.0   NaN    54.0           FT
+# 2   P003      M     PT  AWS   5.0   5.0    59.0           PT
+# 3   P004      F     FT  AWS   NaN   8.0   120.0           FT
+# 4   P005      M     PT   DS   7.0  11.0    58.0           FT
+# 5   P006      F     PT  NaN   1.0   NaN    75.0          NaN
+# 6   P007      M     FT   FS   NaN   NaN     NaN           FT
+# 7   P008      F     FT   FS  10.0   2.0   136.0           FT
+# 8   P009      M     PT  NaN  14.0   3.0    60.0          NaN
+# 9   P010      F     FT   DS   NaN   7.0   125.0           FT
+# 10  P011      M     PT  AWS   6.0   9.0     NaN           PT
+
+# print(df.groupby("dept")["salary"].mean())
+# dept
+# AWS    89.5
+# DS     91.5
+# FS     95.0
+# Name: salary, dtype: float64
+
+# print(df.groupby("dept")["salary"].transform("mean"))
+# 0     91.5
+# 1     95.0
+# 2     89.5
+# 3     89.5
+# 4     91.5
+# 5      NaN
+# 6     95.0
+# 7     95.0
+# 8      NaN
+# 9     91.5
+# 10    89.5
+# Name: salary, dtype: float64
+
+# print(df.groupby(["status", "dept"])["salary"].mean())
+# status  dept
+# FT      AWS     120.0
+#         DS      125.0
+#         FS      136.0
+# PT      AWS      59.0
+#         DS       58.0
+#         FS       54.0
+# Name: salary, dtype: float64
+
+# print(df.groupby(["status", "dept"])["salary"].transform("mean"))
+# 0     125.0
+# 1      54.0
+# 2      59.0
+# 3     120.0
+# 4      58.0
+# 5       NaN
+# 6     136.0
+# 7     136.0
+# 8       NaN
+# 9     125.0
+# 10     59.0
+# Name: salary, dtype: float64
+
+df["trans_salary"] = df.groupby(["status","dept"])["salary"].transform("mean")
+# print(df)
+#       id gender status dept  var1  var2  salary trans_status  trans_salary
+# 0   P001      M     FT   DS   2.0   8.0     NaN           FT         125.0
+# 1   P002      F     PT   FS   3.0   NaN    54.0           FT          54.0
+# 2   P003      M     PT  AWS   5.0   5.0    59.0           PT          59.0
+# 3   P004      F     FT  AWS   NaN   8.0   120.0           FT         120.0
+# 4   P005      M     PT   DS   7.0  11.0    58.0           FT          58.0
+# 5   P006      F     PT  NaN   1.0   NaN    75.0          NaN           NaN
+# 6   P007      M     FT   FS   NaN   NaN     NaN           FT         136.0
+# 7   P008      F     FT   FS  10.0   2.0   136.0           FT         136.0
+# 8   P009      M     PT  NaN  14.0   3.0    60.0          NaN           NaN
+# 9   P010      F     FT   DS   NaN   7.0   125.0           FT         125.0
+# 10  P011      M     PT  AWS   6.0   9.0     NaN           PT          59.0
+
+df["salary"].fillna(df.groupby(["status","dept"])["salary"].transform("mean"), inplace=True)
+# print(df)
+#       id gender status dept  var1  var2  salary trans_status  trans_salary
+# 0   P001      M     FT   DS   2.0   8.0   125.0           FT         125.0
+# 1   P002      F     PT   FS   3.0   NaN    54.0           FT          54.0
+# 2   P003      M     PT  AWS   5.0   5.0    59.0           PT          59.0
+# 3   P004      F     FT  AWS   NaN   8.0   120.0           FT         120.0
+# 4   P005      M     PT   DS   7.0  11.0    58.0           FT          58.0
+# 5   P006      F     PT  NaN   1.0   NaN    75.0          NaN           NaN
+# 6   P007      M     FT   FS   NaN   NaN   136.0           FT         136.0
+# 7   P008      F     FT   FS  10.0   2.0   136.0           FT         136.0
+# 8   P009      M     PT  NaN  14.0   3.0    60.0          NaN           NaN
+# 9   P010      F     FT   DS   NaN   7.0   125.0           FT         125.0
+# 10  P011      M     PT  AWS   6.0   9.0    59.0           PT          59.0
+
 
 # ------------------------------------------------------------
 # ------------------------------------------------------------
