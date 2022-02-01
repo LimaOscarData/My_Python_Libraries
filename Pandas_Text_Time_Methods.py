@@ -186,8 +186,20 @@ df = pd.read_excel('/Users/oscar/Desktop/My_Python_Libraries/text_exercise.XLSX'
 # 7  E0006   Albert simon         IT  data scientist  125000dolar  35
 
 
+# let's change the value of another column's related rows which contains the True value :
+df.loc[df['job'].str.contains('data'), 'department' ] = 'DS'
+# print(df['department'])
+# 0    HR
+# 1    IT
+# 2    DS
+# 3    HR
+# 4    IT
+# 5    IT
+# 6    DS
+# 7    DS
+# Name: department, dtype: object
 
-
+print(df.loc[])
 
 
 
