@@ -1,3 +1,5 @@
+import re
+
 import numpy as np
 import pandas as pd
 import seaborn as sns
@@ -199,7 +201,7 @@ df.loc[df['job'].str.contains('data'), 'department' ] = 'DS'
 # 7    DS
 # Name: department, dtype: object
 
-print(df.loc[])
+# print(df.loc[])
 
 
 
